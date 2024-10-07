@@ -1,18 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.6b2af760.css",
-    "main.js": "/static/js/main.3d630944.js",
+    "main.css": "/static/css/main.4bfc565a.css",
+    "main.js": "/static/js/main.8334b983.js",
     "static/media/grain.gif": "/static/media/grain.e542d5ad14ba28357c9c.gif",
     "static/media/grain-dark.gif": "/static/media/grain-dark.7f65d030d0e37e0583a9.gif",
     "static/media/background.mp4": "/static/media/background.da1d75ce0808ae56c3e6.mp4",
     "static/media/GibstoneTrial-Medium.ttf": "/static/media/GibstoneTrial-Medium.0373148d7a1cf69e0404.ttf",
+    "static/media/hands.jpg": "/static/media/hands.728780c7ecc8ef6104dd.jpg",
     "static/media/Akira Expanded Demo.otf": "/static/media/Akira Expanded Demo.5198553380d9bb727554.otf",
     "index.html": "/index.html",
-    "main.6b2af760.css.map": "/static/css/main.6b2af760.css.map",
-    "main.3d630944.js.map": "/static/js/main.3d630944.js.map"
+    "main.4bfc565a.css.map": "/static/css/main.4bfc565a.css.map",
+    "main.8334b983.js.map": "/static/js/main.8334b983.js.map"
   },
   "entrypoints": [
-    "static/css/main.6b2af760.css",
-    "static/js/main.3d630944.js"
+    "static/css/main.4bfc565a.css",
+    "static/js/main.8334b983.js"
   ]
 }
