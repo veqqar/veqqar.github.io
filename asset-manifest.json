@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.878bf0e3.css",
+    "main.css": "/static/css/main.6cfb3870.css",
     "main.js": "/static/js/main.3d330282.js",
     "static/media/PottaOne-Regular.ttf": "/static/media/PottaOne-Regular.359a6a8dfa58f1ead0ae.ttf",
     "static/media/grain.gif": "/static/media/grain.e542d5ad14ba28357c9c.gif",
@@ -21,11 +21,11 @@
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/index.html",
-    "main.878bf0e3.css.map": "/static/css/main.878bf0e3.css.map",
+    "main.6cfb3870.css.map": "/static/css/main.6cfb3870.css.map",
     "main.3d330282.js.map": "/static/js/main.3d330282.js.map"
   },
   "entrypoints": [
-    "static/css/main.878bf0e3.css",
+    "static/css/main.6cfb3870.css",
     "static/js/main.3d330282.js"
   ]
 }
