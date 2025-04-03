@@ -1,0 +1,644 @@
+:root {
+  /* BASE COLORS */
+  --colorA: rgb(204, 204, 204);
+  --colorB: transparent;
+  --colorC: #e96f7c;
+  --colorD: #fff;
+  --colorE: #111722;
+  --colorF: #000;
+  --colorG: #ffe437;
+  --colorH: #39ff14;
+  --colorI: #090d12;
+  --colorJ: #cdc9b9;
+  --colorK: #0e1018;
+  --colorL: #eeba98;
+  --colorM: #eae6d6;
+  --colorN: rgba(255, 255, 255, 0.75);
+}
+
+/* GENERAL FONTS TYPOS */
+@font-face {
+  font-family: 'Gibstone Med';
+  src: url('../fonts/GibstoneTrial-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LEDLIGHT';
+  src: url('../fonts/LEDLIGHT.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Akira Expanded';
+  src: url('../fonts/Akira\ Expanded\ Demo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* BASE STYLES */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--colorE);
+  cursor: none;
+  overflow-x: hidden;
+  font-family: Gibstone Med;
+}
+
+/* BACKGROUND VIDEO */
+.app {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--colorF);
+}
+
+.background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 1;
+  filter: blur(2.5px);
+}
+
+.background-video.visible {
+  opacity: 0.65;
+}
+
+.background-video.hidden {
+  opacity: 0;
+}
+
+/* GRAIN OVERLAY */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../imgs/grain.gif') repeat center center;
+  opacity: 0.2;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* PRELOADER STYLES */
+.Preloader__Content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  filter: blur(0);
+  transition: opacity 1s ease-in-out, filter 1s ease-in-out;
+}
+
+.Preloader__Content-exit {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.Preloader__Content-exit-active {
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.Preloader__Content.closing {
+  animation: fadeOutBlur 1s ease-in-out forwards;
+}
+
+.Preloader__Container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--colorI);
+}
+
+.Preloader__Word {
+  color: var(--colorG);
+  font-family: 'LEDLIGHT', 'Potta One';
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 1;
+  text-shadow:
+    0 0 15px var(--colorH),
+    0 0 60px var(--colorH),
+    0 0 65px var(--colorH),
+    0 0 70px var(--colorH),
+    0 0 75px var(--colorH),
+    0 0 200px var(--colorH);
+  animation: pulse 4s infinite;
+}
+
+.Preloader__Text {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  color: var(--colorN);
+  font-family: sans-serif;
+  text-transform: uppercase;
+  align-content: justify;
+  font-size: 12px;
+}
+
+/* CURSOR STYLES */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.05s ease-out,
+    width 0.1s ease-out,
+    height 0.1s ease-out,
+    left 0.1s ease-out,
+    top 0.1s ease-out;
+}
+
+.cursor-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--colorJ);
+}
+
+.cursor-inner {
+  background-color: var(--colorJ);
+}
+
+.cursor-inner::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: var(--colorJ);
+}
+
+/* MAGNETIC CURSOR STYLE */
+.cursor.merged {
+  width: 8px !important;
+  height: 8px !important;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cursor-inner.merged {
+  background: white !important;
+  box-shadow: 
+    0 0 10px white,
+    0 0 2px white,
+    0 0 4px white,
+    0 0 6px white,
+    0 0 8px white,
+    0 0 10px white,
+    0 0 15px white,
+    0 0 20px white,
+    0 0 25px white !important;
+  animation: twinkle 3.5s infinite;
+}
+
+.cursor:not(.merged) .cursor-inner {
+  transition: 
+    background-color 0.25s ease-out,
+    box-shadow 0.25s ease-out;
+}
+
+.cursor:not(.merged) .cursor-inner {
+  background-color: var(--colorJ) !important;
+  box-shadow: none !important;
+}
+
+@keyframes magnetic-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+
+
+
+
+/* WEBSITE CONTENT */
+.content {
+  /* backdrop-filter: invert(0.75); */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  color: var(--colorJ);
+  cursor: none;
+}
+
+/* HOME PAGE CONTENT */
+.left__side__content {
+  font-family: 'Akira Expanded';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+  box-sizing: border-box;
+}
+
+.banner__description {
+  border-radius: 7.5px;
+  border: 4px solid var(--colorJ);
+  z-index: 999;
+  /* z-index: 1000; WITH THIS THE CURSOR IS UNDER THE BANNER CARD*/
+  background-color: var(--colorK);
+  display: flex;
+  height: 200px;
+  margin-top: 50px;
+  margin-bottom: auto;
+  font-size: 0.85rem;
+  color: var(--colorJ);
+  text-align: right;  
+  line-height: 1.5;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner__description_content {
+  align-items: center;
+  justify-content: center;
+  margin-left: 30%;
+  margin-right: 10%;
+  width: 60%;
+  height: 100%;
+  display: flex;
+
+}
+
+
+/* SPOTLIGHT CARD STYLE */
+
+.banner__card__spotlight {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(255, 255, 255, 0.05);
+}
+
+.banner__card__spotlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.banner__card__spotlight:hover::before,
+.banner__card__spotlight:focus-within::before {
+  opacity: 0.6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.home__slider {
+  background-color: var(--colorK);
+  border-radius: 7.5px;
+  border: 4px solid var(--colorJ);
+  width: 95%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5%;
+  margin-top: auto;
+  z-index: 3;
+}
+
+.home__slider__prev,
+.home__slider__next {
+  padding: 8px 20px;
+  background-color: var(--colorJ);
+  border: none;
+  border-radius: 4px;
+  color: var(--colorK);
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.home__slider__prev:hover,
+.home__slider__next:hover {
+  opacity: 0.8;
+}
+
+.home__slider__nav {
+  flex-grow: 1;
+  text-align: center;
+  letter-spacing: 10px;
+  color: var(--colorJ);
+  padding: 0 15px;
+}
+
+.home__description_subtittle {
+  width: 60%;
+  height: 7.5%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.home__description_tittle {
+  width: 60%;
+  height: 20%;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.description__link {
+  width: 20%;
+  height: 30px;
+}
+
+.description__link__button {
+  border: 4px solid var(--colorJ);
+  background-color: var(--colorK);
+  border-radius: 7.5px;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.description__link__button:hover {
+  opacity: 0.8;
+}
+
+.right__side__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 65%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  color: var(--colorJ);
+}
+
+.home__tittle {
+  width: 90%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.header__section {
+  font-family: 'Akira Expanded';
+  font-size: 1.5rem;
+  text-align: right;
+  width: 100%;
+}
+
+.home__name {
+  color: var(--colorL);
+  font-size: 3rem;
+  font-style: italic;
+  font-family: 'LEDLIGHT', 'Most Wasted';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.home__carrousel {
+  width: 100%;
+  height: 50vh;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
+
+.home__carrousel canvas {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* SECTION SLIDER STYLES */
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    color: white;
+    opacity: 1;
+    transform: scale(1.5);
+    filter: brightness(5); 
+  }
+}
+
+.section__bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section__links {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  gap: 5rem;
+}
+
+.onClick__Section__link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 
+  0 0 1px white,
+  0 0 4px white,
+  0 0 8px white,
+  0 0 10px white;
+}
+
+.dot__focused {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: white;
+  box-shadow:
+    0 0 2px white,
+    0 0 4px white,
+    0 0 6px white,
+    0 0 8px white,
+    0 0 10px white,
+    0 0 15px white,
+    0 0 20px white,
+    0 0 25px white;
+  animation: twinkle 3.5s infinite;
+  transition: box-shadow 5s ease-in-out;
+}
+
+/* MORE HOME STYLES */
+
+
+.home__subtittle {
+  margin-top: 5%;
+  width: 100%;
+  font-size: 1rem;
+  font-family: 'Akira Expanded';
+  text-align: left;
+}
+
+.home__subtittle_sections {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.home__subtittle_section {
+  width: 250px;
+  align-self: flex-start;
+}
+
+.home__subtittle_section__tittle {
+  color: var(--colorM);
+}
+
+.home__subtittle_section__content {
+  color: var(--colorJ);
+  margin-top: 20px;
+  font-size: 0.75rem;
+  font-family: 'Akira Expanded';
+  text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

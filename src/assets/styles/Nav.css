@@ -1,0 +1,188 @@
+/* ROOT VARIABLES */
+
+:root {
+  --colorA: rgb(204, 204, 204);
+  --colorB: transparent;
+  --colorC: #e96f7c;
+}
+
+/* FONTS USED */
+
+@font-face {
+  font-family: 'Akira Expanded';
+  src: url('../fonts/Akira\ Expanded\ Demo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* THE NAV STYLES */
+
+li {
+  list-style: none;
+}
+
+button {
+  cursor: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  padding: 0;
+}
+
+button:focus {
+  outline: none;
+}
+
+a, button.nav__link {
+  text-decoration: none;
+  color: var(--colorA);
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  height: 8vh;
+  z-index: 11;
+  font-size: 1.25rem;
+  font-family: 'Akira Expanded', sans-serif;
+  width: 95%;
+  height: 80px;
+}
+
+.nav__menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7rem;
+}
+
+.nav__toggler {
+  display: none;
+}
+
+.nav__toggler div {
+  width: 2.5rem;
+  height: 0.2rem;
+  margin: 0.4rem;
+  margin-right: 3rem;
+  background: var(--colorA);
+  transition: 0.3s ease-in;
+}
+
+.nav__link:hover {
+  animation: hover-logo 0.3s ease-in-out forwards;
+}
+
+@keyframes hover-nav__link {
+  0% { color: var(--colorA); }
+  100% { color: var(--colorC); }
+}
+
+.logo {
+  position: relative;
+  font-size: 1.25rem;
+  color: var(--colorA);
+  font-family: 'Akira Expanded';
+}
+
+.logo:hover {
+  animation: hover-logo 0.3s ease-in-out forwards;
+}
+
+@keyframes hover-logo {
+  0% { color: var(--colorA); }
+  100% { color: var(--colorC); }
+}
+
+.home__icon {
+  cursor: none;
+  width: 75px;
+  height: 75px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .nav__toggler {
+    display: block;
+    cursor: none;
+    z-index: 11;
+  }
+
+  .nav__menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0%;
+    background: url('../imgs/grain-dark.gif') repeat center center;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: 0.5s ease-in;
+    margin: 0px;
+    justify-content: center;
+    gap: 25%;
+    overflow: hidden;
+    z-index: 11;
+  }
+
+  .nav__active {
+    transform: translateX(0%);
+  }
+
+  .toggle .line1 {
+    transform: rotate(-45deg) translate(-4px, 5px);
+  }
+  .toggle .line2 {
+    opacity: 0;
+  }
+  .toggle .line3 {
+    transform: rotate(45deg) translate(-4px, -5px);
+  }
+}
+
+/* THEME SWITCHER STYLE */
+
+.theme-switcher {
+  --rotation: 0deg;
+  --active-rotation: 0deg;
+  
+  width: 30px;
+  aspect-ratio: 1;
+  border: 2px solid var(--colorA);
+  border-radius: 4px;
+  background: 
+    linear-gradient(
+      135deg,
+      var(--colorB) 0%,
+      var(--colorB) 25%,
+      var(--colorA) 25%,
+      var(--colorA) 75%,
+      var(--colorB) 75%,
+      var(--colorB) 100%
+    );
+  background-size: 300% 120%;
+  background-position: 0%;
+  transform: rotate(calc(var(--rotation) + var(--active-rotation)));
+  transition: 
+    transform 0.225s cubic-bezier(0, 0, 0.2, 1),
+    background-position 0.4s ease;
+}
+
+.theme-switcher:hover {
+  background-position: 100%;
+}
+
+.theme-switcher.active {
+  --active-rotation: 180deg;
+}
+
