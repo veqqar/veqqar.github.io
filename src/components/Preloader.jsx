@@ -1,6 +1,5 @@
 import React from 'react';
 import GrainOverlay from './GrainOverlay';
-import '../assets/styles/App.css';
 
 const Preloader = ({ closing }) => {
   return (

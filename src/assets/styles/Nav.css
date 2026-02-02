@@ -55,6 +55,12 @@ a, button.nav__link {
   font-family: 'Akira Expanded', sans-serif;
   width: 95%;
   height: 80px;
+  transition: transform 0.1s ease-in-out;  
+  
+}
+
+.nav--hidden {
+  transform: translateY(-100%);
 }
 
 .nav__menu {

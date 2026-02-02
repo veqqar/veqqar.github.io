@@ -17,6 +17,7 @@
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.8",
     "styled-components": "^6.1.11",
+    "three": "^0.181.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -46,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "gh-pages": "^6.1.1"
   }
 }

@@ -1,9 +1,8 @@
-import React, { useState , useEffect } from 'react';
-import '../assets/styles/App.css';
+import React, { useState, useEffect } from 'react';
 import '../assets/styles/Nav.css';
 import SpotlightCard from './SpotlightCard';
-
-// SLIDER COMPONENT
+import HomeCarousel from './HomeCarousel';
+import '../assets/styles/App.css';
 
 const SectionSlider = ({ currentSection, goToSection, goToNext, goToPrev }) => {
   return (
@@ -32,27 +31,13 @@ const SectionSlider = ({ currentSection, goToSection, goToNext, goToPrev }) => {
 };
 
 const Home = ({ setCurrentPage }) => {
-  const [hoveredRow, setHoveredRow] = useState(null);
-  const [fadeActive, setFadeActive] = useState(false);
-  const totalRows = 20;
-
-  const animationDuration = 600;
-  const delayIncrement = 50;
-
-  const handleImageClick = () => {
-    setFadeActive(true);
-    setTimeout(() => setFadeActive(false), totalRows * delayIncrement + animationDuration);
-  };
-  
-
-  // CALCULATE EXPERIENCE TIME
   const [timeSince, setTimeSince] = useState('');
+  const [currentSection, setCurrentSection] = useState(0);
 
   useEffect(() => {
     const calculateTimeSince = () => {
       const specificDate = new Date('2021-10-25');
       const currentDate = new Date();
-
       const differenceInMs = currentDate - specificDate;
 
       const msInYear = 1000 * 60 * 60 * 24 * 365.25;
@@ -71,42 +56,21 @@ const Home = ({ setCurrentPage }) => {
     calculateTimeSince();
   }, []);
 
-
-  // SLIDER COMPONENT BEHAVIOR
-
-  const [currentSection, setCurrentSection] = useState(0);
-  const goToSection = (index) => {
-    setCurrentSection(index);
-  };
-  const goToNext = () => {
-    setCurrentSection((prev) => (prev + 1) % 3);
-  };
-  const goToPrev = () => {
-    setCurrentSection((prev) => (prev - 1 + 3) % 3);
-  };
-
+  const goToSection = (index) => setCurrentSection(index);
+  const goToNext = () => setCurrentSection(prev => (prev + 1) % 3);
+  const goToPrev = () => setCurrentSection(prev => (prev - 1 + 3) % 3);
 
   return (
     <div>
-
-      {/* ################################## */}
-      {/* ###   SECTION SLIDER OPTIONS   ### */}
-      {/* ################################## */}
-
-      {/* ################### */}
-      {/* ###  SECTION 1  ### */}
-      {/* ################### */}
-
+      {/* Sección 1 - About */}
       {currentSection === 0 && (
         <section>
           <div>
             <div className='left__side__content'>
               <div className='banner__description'>
-                <SpotlightCard 
-                  spotlightColor="rgba(233, 111, 123, 0.25)"
-                >
+                <SpotlightCard spotlightColor="rgba(89, 73, 112, 0.5)">
                   <div className='banner__description_content'>
-                    My name is David Gomez Pilipenko aka //veqqar im a software developer and cybersecurity specialist. Based in Barcelona (ES).
+                    My name is David ********** ********** aka //veqqar im a software developer and cybersecurity specialist. Based in Barcelona (ES).
                   </div>
                 </SpotlightCard>
               </div>
@@ -133,64 +97,22 @@ const Home = ({ setCurrentPage }) => {
 
             <div className='right__side__content'>
               <div className='home__tittle'>
-                <div className='header__section'>
-                  hi im <span className='home__name'>veqqar</span>
-                </div>
-
-                <div className='home__carrousel' style={{ position: 'relative' }}>
-                  <img 
-                    src={''} 
-                    alt='Carousel' 
-                    className='home__carrousel__img' 
-                  />
-
-                  <div className="home__carrousel__img__rows" onClick={handleImageClick}>
-                    {Array.from({ length: totalRows }, (_, index) => {
-                      let blurIntensity = 0;
-                      let saturationIntensity = 1;
-
-                      if (hoveredRow !== null && Math.abs(index - hoveredRow) <= 3) {
-                        const distance = Math.abs(index - hoveredRow);
-                        blurIntensity = 7.5 - (distance * 1.5);
-                        saturationIntensity = 1 + (3 - distance) * 0.25; 
-                      }
-
-                      return (
-                        <div 
-                          key={index} 
-                          className="home__carrousel__img__row"
-                          onMouseEnter={() => setHoveredRow(index)}
-                          onMouseLeave={() => setHoveredRow(null)}
-                          style={{ 
-                            '--blur': `${blurIntensity}px`, 
-                            '--saturate': saturationIntensity,
-                            '--delay': `${index * delayIncrement}ms`
-                          }}
-                        >
-                          <div 
-                            className="home__carrousel__img__row__inner"
-                            style={
-                              fadeActive
-                                ? {
-                                    animation: `expandWidth ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1) forwards`,
-                                    animationDelay: `${index * delayIncrement}ms`
-                                  }
-                                : {}
-                            }
-                          />
-                        </div>
-                      );
-                    })}
+                <div className='carrousel__section'>
+                  <div className='header__section'>
+                    hi im <span className='home__name'>veqqar</span>
+                  </div>
+                  <div className='home__carrousel' style={{ position: 'relative' }}>
+                    <HomeCarousel section={0} />
                   </div>
                 </div>
-
+                
                 <div className="home__subtittle">
                   <div className="home__subtittle_sections">
                     <div className="home__subtittle_section"></div>
                     <div className="home__subtittle_section">
                       <div className='home__subtittle_section__tittle'>■ Experience</div>
                       <div className='home__subtittle_section__content' style={{fontSize: '1rem'}}>
-                      {timeSince}
+                        {timeSince}
                       </div>
                     </div>
                     <div className="home__subtittle_section">
@@ -213,23 +135,16 @@ const Home = ({ setCurrentPage }) => {
         </section>
       )}
 
-
-      {/* ################### */}
-      {/* ###  SECTION 2  ### */}
-      {/* ################### */}
-
-
+      {/* Sección 2 - Projects */}
       {currentSection === 1 && (
         <section>
           <div>
             <div className='left__side__content'>
               <div className='banner__description'>
-                <SpotlightCard 
-                  spotlightColor="rgba(233, 111, 123, 0.25)"
-                >
-                    <div className='banner__description_content'>
-                      This banner contains a small description of the projects that I have been working on.
-                    </div>
+                <SpotlightCard spotlightColor="rgba(206, 7, 70, 0.25)">
+                  <div className='banner__description_content'>
+                    This banner contains a small description of the projects that I have been working on.
+                  </div>
                 </SpotlightCard>
               </div>
 
@@ -255,54 +170,12 @@ const Home = ({ setCurrentPage }) => {
 
             <div className='right__side__content'>
               <div className='home__tittle'>
-                <div className='header__section'>
-                  hi im <span className='home__name'>veqqar</span>
-                </div>
-
-                <div className='home__carrousel' style={{ position: 'relative' }}>
-                  <img 
-                    src={''} 
-                    alt='Carousel' 
-                    className='home__carrousel__img' 
-                  />
-
-                  <div className="home__carrousel__img__rows" onClick={handleImageClick}>
-                    {Array.from({ length: totalRows }, (_, index) => {
-                      let blurIntensity = 0;
-                      let saturationIntensity = 1;
-
-                      if (hoveredRow !== null && Math.abs(index - hoveredRow) <= 3) {
-                        const distance = Math.abs(index - hoveredRow);
-                        blurIntensity = 7.5 - (distance * 1.5);
-                        saturationIntensity = 1 + (3 - distance) * 0.25; 
-                      }
-
-                      return (
-                        <div 
-                          key={index} 
-                          className="home__carrousel__img__row"
-                          onMouseEnter={() => setHoveredRow(index)}
-                          onMouseLeave={() => setHoveredRow(null)}
-                          style={{ 
-                            '--blur': `${blurIntensity}px`, 
-                            '--saturate': saturationIntensity,
-                            '--delay': `${index * delayIncrement}ms`
-                          }}
-                        >
-                          <div 
-                            className="home__carrousel__img__row__inner"
-                            style={
-                              fadeActive
-                                ? {
-                                    animation: `expandWidth ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1) forwards`,
-                                    animationDelay: `${index * delayIncrement}ms`
-                                  }
-                                : {}
-                            }
-                          />
-                        </div>
-                      );
-                    })}
+                <div className='carrousel__section'>
+                  <div className='header__section'>
+                    hi im <span className='home__name'>veqqar</span>
+                  </div>
+                  <div className='home__carrousel' style={{ position: 'relative' }}>
+                    <HomeCarousel section={1} />
                   </div>
                 </div>
 
@@ -317,7 +190,7 @@ const Home = ({ setCurrentPage }) => {
                     <div className="home__subtittle_section">
                       <div className='home__subtittle_section__tittle'>■ Experience</div>
                       <div className='home__subtittle_section__content' style={{fontSize: '1rem'}}>
-                      {timeSince}
+                        {timeSince}
                       </div>
                     </div>
                     <div className="home__subtittle_section">
@@ -340,25 +213,18 @@ const Home = ({ setCurrentPage }) => {
         </section>
       )}
 
-
-      {/* ################### */}
-      {/* ###  SECTION 3  ### */}
-      {/* ################### */}
-
-
+      {/* Sección 3 - Contact */}
       {currentSection === 2 && (
         <section>
           <div>
             <div className='left__side__content'>
               <div className='banner__description'>
-              <SpotlightCard 
-                spotlightColor="rgba(233, 111, 123, 0.25)"
-              >
+                <SpotlightCard spotlightColor="rgba(64, 197, 204, 0.3)">
                   <div className='banner__description_content'>
                     Let's connect for opportunities in software development and cybersecurity. Available for freelance and consulting projects.
                   </div>
-              </SpotlightCard>
-            </div>
+                </SpotlightCard>
+              </div>
 
               <SectionSlider
                 currentSection={currentSection}
@@ -382,54 +248,12 @@ const Home = ({ setCurrentPage }) => {
 
             <div className='right__side__content'>
               <div className='home__tittle'>
-                <div className='header__section'>
-                  hi im <span className='home__name'>veqqar</span>
-                </div>
-
-                <div className='home__carrousel' style={{ position: 'relative' }}>
-                  <img 
-                    src={''} 
-                    alt='Carousel' 
-                    className='home__carrousel__img' 
-                  />
-
-                  <div className="home__carrousel__img__rows" onClick={handleImageClick}>
-                    {Array.from({ length: totalRows }, (_, index) => {
-                      let blurIntensity = 0;
-                      let saturationIntensity = 1;
-
-                      if (hoveredRow !== null && Math.abs(index - hoveredRow) <= 3) {
-                        const distance = Math.abs(index - hoveredRow);
-                        blurIntensity = 7.5 - (distance * 1.5);
-                        saturationIntensity = 1 + (3 - distance) * 0.25; 
-                      }
-
-                      return (
-                        <div 
-                          key={index} 
-                          className="home__carrousel__img__row"
-                          onMouseEnter={() => setHoveredRow(index)}
-                          onMouseLeave={() => setHoveredRow(null)}
-                          style={{ 
-                            '--blur': `${blurIntensity}px`, 
-                            '--saturate': saturationIntensity,
-                            '--delay': `${index * delayIncrement}ms`
-                          }}
-                        >
-                          <div 
-                            className="home__carrousel__img__row__inner"
-                            style={
-                              fadeActive
-                                ? {
-                                    animation: `expandWidth ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1) forwards`,
-                                    animationDelay: `${index * delayIncrement}ms`
-                                  }
-                                : {}
-                            }
-                          />
-                        </div>
-                      );
-                    })}
+                <div className='carrousel__section'>
+                  <div className='header__section'>
+                    hi im <span className='home__name'>veqqar</span>
+                  </div>
+                  <div className='home__carrousel' style={{ position: 'relative' }}>
+                    <HomeCarousel section={2} />
                   </div>
                 </div>
 
@@ -439,7 +263,7 @@ const Home = ({ setCurrentPage }) => {
                     <div className="home__subtittle_section">
                       <div className='home__subtittle_section__tittle'>■ Experience</div>
                       <div className='home__subtittle_section__content' style={{fontSize: '1rem'}}>
-                      {timeSince}
+                        {timeSince}
                       </div>
                     </div>
                     <div className="home__subtittle_section">

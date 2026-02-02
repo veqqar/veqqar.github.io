@@ -5,7 +5,7 @@ import Home from './components/Home';
 import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
-import Cursor from './components/Cursor';
+import Cursor from './components/extra_functions/Cursor';
 import Nav from './components/Nav';
 import background from './assets/imgs/background.mp4';
 import './assets/styles/App.css';
@@ -16,6 +16,18 @@ const App = () => {
   const [timeoutCompleted, setTimeoutCompleted] = useState(false);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
   const [isPreloaderClosing, setIsPreloaderClosing] = useState(false);
+  const [theme, setTheme] = useState('dark');
+  const [aboutSection, setAboutSection] = useState(1); // Estado para la sección activa del About
+
+  // Aplicar el tema al documento
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Función para cambiar el tema
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     const welcomeTimeout = setTimeout(() => {
@@ -34,7 +46,6 @@ const App = () => {
     }
   }, [timeoutCompleted, videoLoaded]);
 
-
   const handleVideoLoad = () => {
     setVideoLoaded(true);
   };
@@ -44,7 +55,7 @@ const App = () => {
       case 'home':
         return <Home setCurrentPage={setCurrentPage} />;
       case 'about':
-        return <About />;
+        return <About setAboutSection={setAboutSection} />;
       case 'projects':
         return <Projects />;
       case 'contact':
@@ -72,7 +83,13 @@ const App = () => {
         >
           <source src={background} type="video/mp4" />
         </video>
-        <Nav setCurrentPage={setCurrentPage} />
+        <Nav 
+          setCurrentPage={setCurrentPage} 
+          toggleTheme={toggleTheme} 
+          theme={theme} 
+          aboutSection={aboutSection}
+          currentPage={currentPage}
+        />
         <div className="content">{renderPage()}<Cursor /></div>
       </div>
     </>

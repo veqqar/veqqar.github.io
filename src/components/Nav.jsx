@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import '../assets/styles/Nav.css';
 
-function Navbar({ setCurrentPage }) {
+function Navbar({ setCurrentPage, toggleTheme, theme, aboutSection, currentPage }) {
   const [navMenuClass, setNavMenuClass] = useState("nav__menu");
   const [menuIconClass, setMenuIconClass] = useState("nav__toggler");
-  const [isThemeActive, setIsThemeActive] = useState(false);
-
-  const handleThemeToggle = () => {
-    setIsThemeActive(!isThemeActive);
-  };
 
   const toggleMobileMenu = () => {
     setNavMenuClass(navMenuClass === "nav__menu" ? "nav__menu nav__active" : "nav__menu");
@@ -21,8 +16,11 @@ function Navbar({ setCurrentPage }) {
     setMenuIconClass("nav__toggler");
   };
 
+  // Determinar si el nav debe estar oculto
+  const shouldHideNav = currentPage === 'about' && aboutSection !== 1;
+
   return (
-    <nav className="nav">
+    <nav className={`nav ${shouldHideNav ? 'nav--hidden' : ''}`}>
       <div className="logo" onClick={() => handleNavigation('home')}>
         <span>Home</span>
       </div>
@@ -44,8 +42,8 @@ function Navbar({ setCurrentPage }) {
         </li>
         <li className="nav__item">
           <button 
-            className={`theme-switcher ${isThemeActive ? 'active' : ''}`}
-            onClick={handleThemeToggle}
+            className={`theme-switcher ${theme === 'light' ? 'active' : ''}`}
+            onClick={toggleTheme}
           ></button>
         </li>
       </ul>

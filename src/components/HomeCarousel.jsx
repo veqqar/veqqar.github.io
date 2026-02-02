@@ -5,40 +5,30 @@ import section3Image from '../assets/imgs/carrousel_img_3.jpg';
 
 const sectionImages = [section1Image, section2Image, section3Image];
 const NUM_STRIPS = 20;
-const ANIMATION_DURATION = 500;
-const STRIP_DELAY = 30;
-const START_ROW = 0;
+const ANIMATION_DURATION = 800;
+const STRIP_DELAY = 40;
 
 const HomeCarousel = ({ section }) => {
   const canvasRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [isReady, setIsReady] = useState(false);
   const animationRef = useRef(null);
   const stripsProgress = useRef(Array(NUM_STRIPS).fill(0));
   const isAnimating = useRef(false);
+  const isVisible = useRef(false);
 
-  // Cargar imagen actual
   useEffect(() => {
     const img = new Image();
-    img.src = sectionImages[section];
     img.onload = () => {
       setImage(img);
-      drawInitialState();
+      setIsReady(true);
     };
     img.onerror = (e) => console.error('Error loading image:', e);
+    img.src = sectionImages[section];
   }, [section]);
 
-  const drawInitialState = () => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    stripsProgress.current = Array(NUM_STRIPS).fill(0);
-    drawImage(ctx);
-  };
-
-  // Configurar canvas
   useEffect(() => {
-    if (!image) return;
+    if (!isReady || !image) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d', { 
@@ -47,7 +37,7 @@ const HomeCarousel = ({ section }) => {
     });
     
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'auto';
+    ctx.imageSmoothingQuality = 'high';
 
     const container = canvas.parentElement;
     
@@ -56,112 +46,120 @@ const HomeCarousel = ({ section }) => {
       canvas.height = container.clientHeight * 2;
       canvas.style.width = `${container.clientWidth}px`;
       canvas.style.height = `${container.clientHeight}px`;
+      drawImage(ctx);
     };
 
     setCanvasSize();
-    drawImage(ctx);
-
+    
     const resizeObserver = new ResizeObserver(setCanvasSize);
     resizeObserver.observe(container);
 
+    const initTimeout = setTimeout(() => {
+      startAnimation(true);
+    }, 100);
+
     return () => {
+      clearTimeout(initTimeout);
       resizeObserver.disconnect();
       cancelAnimationFrame(animationRef.current);
     };
-  }, [image]);
+  }, [isReady, image]);
 
   const drawImage = (ctx) => {
     if (!image || !ctx) return;
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-    // Dibujar fondo transparente
-    ctx.fillStyle = 'transparent';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    
-    // Calcular stripWidth como número entero
     const stripWidth = Math.ceil(ctx.canvas.width / NUM_STRIPS);
-    
-    // Ajustar el ancho total para evitar desbordamiento
     const totalWidth = stripWidth * NUM_STRIPS;
     const xOffset = Math.max(0, (ctx.canvas.width - totalWidth) / 2);
 
     stripsProgress.current.forEach((progress, index) => {
-        ctx.save();
-        
-        // Calcular posición X como número entero
-        const xPos = Math.floor(xOffset + index * stripWidth);
-        
-        // Ancho de revelación sin espacios
-        const revealWidth = Math.ceil(stripWidth * progress);
+      ctx.save();
+      
+      const xPos = Math.floor(xOffset + index * stripWidth);
+      const revealWidth = Math.ceil(stripWidth * progress);
 
-        // Crear máscara de recorte ajustada
-        ctx.beginPath();
-        ctx.rect(
-            xPos,
-            0,
-            revealWidth,
-            ctx.canvas.height
-        );
-        ctx.clip();
-        
-        // Dibujar porción de la imagen con alineación perfecta
-        ctx.drawImage(
-            image,
-            Math.floor((index * image.width) / NUM_STRIPS), // Source X
-            0, // Source Y
-            Math.ceil(image.width / NUM_STRIPS), // Source width
-            image.height, // Source height
-            xPos, // Dest X
-            0, // Dest Y
-            stripWidth, // Dest width
-            ctx.canvas.height // Dest height
-        );
-        
-        ctx.restore();
+      ctx.beginPath();
+      ctx.rect(xPos, 0, revealWidth, ctx.canvas.height);
+      ctx.clip();
+      
+      ctx.drawImage(
+        image,
+        Math.floor((index * image.width) / NUM_STRIPS),
+        0,
+        Math.ceil(image.width / NUM_STRIPS),
+        image.height,
+        xPos,
+        0,
+        stripWidth,
+        ctx.canvas.height
+      );
+      
+      ctx.restore();
     });
-};
+  };
 
-  const startAnimation = () => {
-    if (isAnimating.current) return;
+  const startAnimation = (forceShow = false) => {
+    if (isAnimating.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
+    const targetVisibility = forceShow ? true : !isVisible.current;
+    isVisible.current = targetVisibility;
     isAnimating.current = true;
 
-    const animate = (startTime) => {
+    stripsProgress.current = Array(NUM_STRIPS).fill(targetVisibility ? 0 : 1);
+    const startTime = performance.now();
+
+    const animate = () => {
       const ctx = canvasRef.current?.getContext('2d');
       if (!ctx) return;
 
+      const elapsedTotal = performance.now() - startTime;
+
       stripsProgress.current = stripsProgress.current.map((_, index) => {
-        const elapsed = performance.now() - startTime - (index * STRIP_DELAY);
+        const stripDelay = targetVisibility 
+          ? index * STRIP_DELAY 
+          : (NUM_STRIPS - 1 - index) * STRIP_DELAY;
+          
+        const elapsed = Math.max(0, elapsedTotal - stripDelay);
         const rawProgress = Math.min(elapsed / ANIMATION_DURATION, 1);
-        
-        // Easing cúbico para efecto de desaceleración
-        return 1 - Math.pow(1 - rawProgress, 3);
+
+        let progress = targetVisibility 
+          ? 1 - Math.pow(1 - rawProgress, 3)
+          : Math.pow(1 - rawProgress, 3);
+
+        return Math.max(0, Math.min(1, progress));
       });
 
       drawImage(ctx);
 
-      if (performance.now() - startTime < (NUM_STRIPS * STRIP_DELAY) + ANIMATION_DURATION) {
-        animationRef.current = requestAnimationFrame(() => animate(startTime));
+      const totalTime = ((NUM_STRIPS - 1) * STRIP_DELAY) + ANIMATION_DURATION;
+      
+      if (elapsedTotal < totalTime) {
+        animationRef.current = requestAnimationFrame(animate);
       } else {
         isAnimating.current = false;
-        // Forzar estado final completo
-        stripsProgress.current = Array(NUM_STRIPS).fill(1);
+        stripsProgress.current = targetVisibility 
+          ? Array(NUM_STRIPS).fill(1)
+          : Array(NUM_STRIPS).fill(0);
         drawImage(ctx);
       }
     };
 
-    animationRef.current = requestAnimationFrame(() => animate(performance.now()));
+    animationRef.current = requestAnimationFrame(animate);
   };
 
   return (
     <div 
       className="home__carrousel" 
-      onClick={startAnimation}
+      onClick={() => startAnimation()}
       style={{ 
         position: 'relative',
-        cursor: 'pointer',
         background: 'transparent',
-        mixBlendMode: 'multiply'
+        mixBlendMode: 'multiply',
+        cursor: 'pointer'
       }}
     >
       <canvas 

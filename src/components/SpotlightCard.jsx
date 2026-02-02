@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import '../assets/styles/App.css';
 
 const SpotlightCard = ({ children, spotlightColor }) => {
   const divRef = useRef(null);

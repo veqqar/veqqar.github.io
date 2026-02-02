@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/styles/App.css';
 
 const SectionSlider = ({ currentSection, setCurrentSection }) => {
   return (
